@@ -18,6 +18,6 @@ Desenvolver a base de programação em Python, preparando para módulos avançad
 
 1. Clone o repositório:
     ```bash
-    git clone https://github.com/seu-usuario/Modulo-Python_Infinity-School.git
+    git clone https://github.com/JoaoGabrielOT/Modulo-Python_Infinity-School.git
     ```
 2. Navegue pelos diretórios e arquivos para acessar os conteúdos e exemplos em Python.
