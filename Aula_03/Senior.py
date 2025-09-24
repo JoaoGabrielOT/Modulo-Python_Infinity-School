@@ -10,30 +10,42 @@ import os
 
 clientes = []
 loop = True
+
+def textoCor(texto, cor):
+    saida = f"\033[{cor}m{texto}\033[0m"
+    return saida
+
+vermelho = 31
+verde = 32
+amarelo = 33
+azul = 34
+ciano = 36
+
 def mostrarClientes():
     if clientes:
         print("\nLista atual:")
         for i, cliente in enumerate(clientes):
             print(f"""
-{i+1}: Nome: {cliente["nome"]}
-   Numero: {cliente["numero"]}
-   Email: {cliente["email"]}
+{i+1}: {textoCor("Nome:", amarelo)} {textoCor({cliente["nome"]}, ciano)}
+   {textoCor("Numero:", amarelo)} {textoCor({cliente["numero"]}, ciano)}
+   {textoCor("Email:", amarelo)} {textoCor({cliente["email"]}, ciano)}
             """)
     else:
         print("\nNão ha cliente para imprimir!")
 
 os.system("clear")
+
 while(loop):
     iguais = ("="*43)
-    print(f"\n{iguais} Lista de clientes {iguais}")
-    op = str(input("""
+    print(f"\n{textoCor(f"{iguais} Lista de clientes {iguais}", ciano)}")
+    op = str(input(f"""
     O que você deseja fazer? Digite apenas o número da opção desejada.
 
-    1 - Cadastrar
-    2 - Deletar
-    3 - Atualizar
-    4 - Listar
-    5 - Sair
+    {textoCor("1", amarelo)} - Cadastrar
+    {textoCor("2", amarelo)} - Deletar
+    {textoCor("3", amarelo)} - Atualizar
+    {textoCor("4", amarelo)} - Listar
+    {textoCor("5", amarelo)} - Sair
     
     """))
     sleep(0.5)
@@ -50,24 +62,29 @@ while(loop):
 
         case "2":
             mostrarClientes()
-            delete = input("\nDigite o nome que deseja deletar: ")
-            try:
-                cliente.remove(delete)
+            delete = int(input("\nDigite o numero do cliente que deseja deletar: "))
+            if delete-1 >= 0 and delete-1 < len(clientes):
+                clientes.pop(delete)
                 mostrarClientes()
-            except:
-                print("\nNome invalido!!!")
+            else:
+                print(f"\n{textoCor("Valor invalido!!!", vermelho)}")
             sleep(0.5)
                 
                 
         case "3":
             os.system("clear")
             mostrarClientes()
-            atualizar = int(input("\nDigite o numero do nome que deseja atualizar: "))
-            if atualizar-1 >= 0 and atualizar-1 < len(cliente):
-                cliente[atualizar-1] = input("\nDigite o novo nome: ")
+            atualizar = int(input("\nDigite o numero do cliente que deseja atualizar: "))
+            if atualizar-1 >= 0 and atualizar-1 < len(clientes):
+                cliente = clientes[atualizar - 1]
+
+                cliente["nome"] = input("\nDigite o novo nome: ")
+                cliente["numero"] = input("\nDigite o novo numero: ")
+                cliente["email"] = input("\nDigite o novo email: ")
+                
                 mostrarClientes()
             else:
-                print("\nValor invalido!!")
+                print(f"\n{textoCor("\nValor invalido!!", vermelho)}")
             sleep(0.5)
                 
                 
@@ -83,5 +100,5 @@ while(loop):
             
         case _:
             os.system("clear")
-            print("Opção invalida!!")
+            print(f"\n{textoCor("Opção invalida!!!", vermelho)}")
             sleep(0.5)
