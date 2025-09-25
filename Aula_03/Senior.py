@@ -7,13 +7,17 @@ for aluno in alunos_e_notas:
 # ======================================================================
 from time import sleep
 import os
+import json
+import platform
 
-clientes = []
+try:
+    with open('clientes.json', 'r') as arquivo:
+        clientes = json.load(arquivo)
+except FileNotFoundError:
+    clientes = []
+    
+
 loop = True
-
-def textoCor(texto, cor):
-    saida = f"\033[{cor}m{texto}\033[0m"
-    return saida
 
 vermelho = 31
 verde = 32
@@ -21,6 +25,13 @@ amarelo = 33
 azul = 34
 ciano = 36
 
+# funcao para definir a cor da escrita no terminal
+def textoCor(texto:str, cor:int):
+    saida = f"\033[{cor}m{texto}\033[0m"
+    return saida
+
+
+# funcao para mostrar clientes
 def mostrarClientes():
     if clientes:
         print("\nLista atual:")
@@ -31,10 +42,28 @@ def mostrarClientes():
    {textoCor("Email:", amarelo)} {textoCor({cliente["email"]}, ciano)}
             """)
     else:
-        print("\nNão ha cliente para imprimir!")
+        print("\nNão ha nenhum cliente cadastrado!")
 
-os.system("clear")
 
+# funcao para limpar o terminal
+def limpar():
+    if platform.system() == 'Windows':
+        os.system('cls')
+    else:
+        os.system("clear")
+
+
+def pausa(time:float = 0.5):
+    sleep(time)
+
+
+# funcao para salvar os clientes no arquivo json
+def salvarClientes():
+    with open('clientes.json', 'w') as arquivo:
+        json.dump(clientes, arquivo, indent=4)
+
+
+limpar()
 while(loop):
     iguais = ("="*43)
     print(f"\n{textoCor(f"{iguais} Lista de clientes {iguais}", ciano)}")
@@ -48,57 +77,77 @@ while(loop):
     {textoCor("5", amarelo)} - Sair
     
     """))
-    sleep(0.5)
+    pausa()
     match op:
         case "1":
-            os.system("clear")
+            limpar()
             cliente = {}
-            cliente["nome"] = input("\nDigite o nome do cliente que deseja cadastrar: ")
-            cliente["numero"] = input("\nDigite o numero do cliente: ")
-            cliente["email"] = input("\nDigite o email do cliente: ")
-            clientes.append(cliente)
-            mostrarClientes()
-            sleep(0.5)
+            try:
+                cliente["nome"] = input("\nDigite o nome do cliente que deseja cadastrar: ")
+                cliente["numero"] = input("\nDigite o numero do cliente: ")
+                cliente["email"] = input("\nDigite o email do cliente: ")
+                clientes.append(cliente)
+                salvarClientes()
+                mostrarClientes()
+            except Exception as e:
+                limpar()
+                print(f"{textoCor("erro:", vermelho)} {e}")
+            pausa()
 
         case "2":
+            limpar()
             mostrarClientes()
-            delete = int(input("\nDigite o numero do cliente que deseja deletar: "))
-            if delete-1 >= 0 and delete-1 < len(clientes):
-                clientes.pop(delete)
-                mostrarClientes()
-            else:
-                print(f"\n{textoCor("Valor invalido!!!", vermelho)}")
-            sleep(0.5)
+            if clientes:
+                try:
+                    delete = int(input("\nDigite o numero do cliente que deseja deletar: "))
+                    if delete - 1 >= 0 and delete - 1 < len(clientes):
+                        clientes.pop(delete - 1)
+                        salvarClientes()
+                        mostrarClientes()
+                    else:
+                        limpar()
+                        print(f"\n{textoCor("Valor invalido!!!", vermelho)}")
+                except Exception as e:
+                    limpar()
+                    print(f"{textoCor("erro:", vermelho)} {e}")
+            pausa()
                 
                 
         case "3":
-            os.system("clear")
+            limpar()
             mostrarClientes()
-            atualizar = int(input("\nDigite o numero do cliente que deseja atualizar: "))
-            if atualizar-1 >= 0 and atualizar-1 < len(clientes):
-                cliente = clientes[atualizar - 1]
+            if clientes:
+                try:
+                    atualizar = int(input("\nDigite o numero do cliente que deseja atualizar: "))
+                    if atualizar-1 >= 0 and atualizar-1 < len(clientes):
+                            cliente = {}
 
-                cliente["nome"] = input("\nDigite o novo nome: ")
-                cliente["numero"] = input("\nDigite o novo numero: ")
-                cliente["email"] = input("\nDigite o novo email: ")
-                
-                mostrarClientes()
-            else:
-                print(f"\n{textoCor("\nValor invalido!!", vermelho)}")
-            sleep(0.5)
+                            cliente["nome"] = input("\nDigite o novo nome: ")
+                            cliente["numero"] = input("\nDigite o novo numero: ")
+                            cliente["email"] = input("\nDigite o novo email: ")
+                            
+                            clientes[atualizar - 1] = cliente
+                            salvarClientes()
+                            mostrarClientes()
+                    else:
+                        print(f"\n{textoCor("\nValor invalido!!", vermelho)}")
+                except Exception as e:
+                    limpar()
+                    print(f"{textoCor("erro:", vermelho)} {e}")
+            pausa()
                 
                 
         case "4":
-            os.system("clear")
+            limpar()
             mostrarClientes()
-            sleep(0.5)
+            pausa(2)
             
 
         case "5":
-            os.system("clear")
+            limpar()
             loop = False
             
         case _:
-            os.system("clear")
+            limpar()
             print(f"\n{textoCor("Opção invalida!!!", vermelho)}")
-            sleep(0.5)
+            pausa()

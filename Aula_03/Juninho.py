@@ -10,7 +10,6 @@ print(filmes_favoritos[-1])
 print()
 print()
 
-
 # ==============================================================
 
 playlist = ["The smiths", "The cure", "tears for fears"]
@@ -20,10 +19,9 @@ for musica in playlist:
 print()
 print()
 
-
 # ==================================================================
 
-notas = [7,8,9,10]
+notas = [7, 8, 9, 10]
 media = 0
 
 for nota in notas:
