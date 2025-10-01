@@ -1,17 +1,8 @@
 # imports
 import random
-import os
-import platform
-
+from BasicFunctions.funcoesBasicas import limpar
 
 #limpa a tela a cada rodagem
-def limpar():
-    if platform.system() == 'Windows':
-        os.system('cls')
-    else:
-        os.system("clear")
-
-
 limpar()
 
 # Faça um gerador de senhas aleatórias , que receba como parâmetros o tamanho da senha , que por padrão inicia em 6
