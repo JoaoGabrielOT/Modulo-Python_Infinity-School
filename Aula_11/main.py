@@ -104,5 +104,4 @@ class ContaCorrente(Conta):
 class ContaPoupanca(Conta):
     def __init__(self, numero_conta, titular):
         super().__init__(numero_conta, titular)
-        self.rendimento = 0.5
-        self.credito = 400
+        self.rendimento = 6
